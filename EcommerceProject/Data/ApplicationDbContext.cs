@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using EcommerceProject.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace EcommerceProject.Data
 {
@@ -8,5 +9,8 @@ namespace EcommerceProject.Data
         {
 
         }
+
+        //categories is a name of table in the db
+        public DbSet<Category> Categories { get; set; }
     }
 }
