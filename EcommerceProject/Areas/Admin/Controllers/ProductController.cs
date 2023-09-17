@@ -1,53 +1,59 @@
 ﻿using EcommerceProject.DataAccess.Data;
 using EcommerceProject.DataAccess.Repository.IRepository;
 using EcommerceProject.Models;
+using EcommerceProject.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace EcommerceProject.Areas.Admin.Controllers
 {
+    [Area("Admin")]
     public class ProductController : Controller
     {
-        //private readonly ApplicationDbContext _db;
-        //private readonly ICategoryRepository _categoryRepo;
         private readonly IUnitOfWork _unitOfWork;
-
         public ProductController(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
-
         public IActionResult Index()
         {
             List<Product> objProductList = _unitOfWork.Product.GetAll().ToList();
+
             return View(objProductList);
         }
 
         public IActionResult Create()
         {
-            return View();
+            ProductVM productVM = new()
+            {
+                CategoryList = _unitOfWork.Category.GetAll().Select(u => new SelectListItem
+                {
+                    Text = u.Name,
+                    Value = u.Id.ToString()
+                }),
+                Product = new Product()
+            };
+            return View(productVM);
         }
-
         [HttpPost]
-        public IActionResult Create(Product obj)
+        public IActionResult Create(ProductVM productVM)
         {
-            //if(obj.Name == obj.DisplayOrder.ToString())
-            //{
-            //    ModelState.AddModelError("name", "The Display Order cannot exactly match the Name");
-            //}
-
-            //if (obj.Name != null && obj.Name.ToLower() == "test")
-            //{
-            //    ModelState.AddModelError("", "Test is an invalid value");
-            //}
-
             if (ModelState.IsValid)
             {
-                _unitOfWork.Product.Add(obj);
+                _unitOfWork.Product.Add(productVM.Product);
                 _unitOfWork.Save();
-                TempData["success"] = "Product created sucessfully";
+                TempData["success"] = "Product created successfully";
                 return RedirectToAction("Index");
             }
-            return View(obj);
+            else
+            {
+                productVM.CategoryList = _unitOfWork.Category.GetAll().Select(u => new SelectListItem
+                {
+                    Text = u.Name,
+                    Value = u.Id.ToString()
+                });
+                return View(productVM);
+            }
         }
 
         public IActionResult Edit(int? id)
@@ -56,14 +62,16 @@ namespace EcommerceProject.Areas.Admin.Controllers
             {
                 return NotFound();
             }
-            Product productFromDB = _unitOfWork.Product.Get(u => u.Id == id);
-            if (productFromDB == null)
+            Product? productFromDb = _unitOfWork.Product.Get(u => u.Id == id);
+            //Product? productFromDb1 = _db.Categories.FirstOrDefault(u=>u.Id==id);
+            //Product? productFromDb2 = _db.Categories.Where(u=>u.Id==id).FirstOrDefault();
+
+            if (productFromDb == null)
             {
                 return NotFound();
             }
-            return View(productFromDB);
+            return View(productFromDb);
         }
-
         [HttpPost]
         public IActionResult Edit(Product obj)
         {
@@ -71,10 +79,11 @@ namespace EcommerceProject.Areas.Admin.Controllers
             {
                 _unitOfWork.Product.Update(obj);
                 _unitOfWork.Save();
-                TempData["success"] = "Product updated sucessfully";
+                TempData["success"] = "Product updated successfully";
                 return RedirectToAction("Index");
             }
-            return View(obj);
+            return View();
+
         }
 
         public IActionResult Delete(int? id)
@@ -83,25 +92,25 @@ namespace EcommerceProject.Areas.Admin.Controllers
             {
                 return NotFound();
             }
-            Product productFromDB = _unitOfWork.Product.Get(u => u.Id == id);
-            if (productFromDB == null)
+            Product? productFromDb = _unitOfWork.Product.Get(u => u.Id == id);
+
+            if (productFromDb == null)
             {
                 return NotFound();
             }
-            return View(productFromDB);
+            return View(productFromDb);
         }
-
         [HttpPost, ActionName("Delete")]
         public IActionResult DeletePOST(int? id)
         {
-            Product obj = _unitOfWork.Product.Get(u => u.Id == id);
+            Product? obj = _unitOfWork.Product.Get(u => u.Id == id);
             if (obj == null)
             {
                 return NotFound();
             }
             _unitOfWork.Product.Remove(obj);
             _unitOfWork.Save();
-            TempData["success"] = "Product deleted sucessfully";
+            TempData["success"] = "Product deleted successfully";
             return RedirectToAction("Index");
         }
     }
