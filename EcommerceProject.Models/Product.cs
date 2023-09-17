@@ -45,5 +45,7 @@ namespace EcommerceProject.Models
         [ForeignKey("CategoryId")]
         public Category Category { get; set; } = default!;
 
+        public string ImageUrl { get; set; } = default!;
+
     }
 }
