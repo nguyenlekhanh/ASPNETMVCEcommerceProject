@@ -1,9 +1,9 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
-    <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
@@ -16,8 +16,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\EcommerceProject.DataAccess\EcommerceProject.DataAccess.csproj" />
     <ProjectReference Include="..\EcommerceProject.Models\EcommerceProject.Models.csproj" />
+    <ProjectReference Include="..\EcommerceProjectUtility\EcommerceProjectUtility.csproj" />
   </ItemGroup>
 
 </Project>
