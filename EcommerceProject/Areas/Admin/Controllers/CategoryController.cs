@@ -3,7 +3,7 @@ using EcommerceProject.DataAccess.Repository.IRepository;
 using EcommerceProject.Models;
 using Microsoft.AspNetCore.Mvc;
 
-namespace EcommerceProject.Controllers
+namespace EcommerceProject.Areas.Admin.Controllers
 {
     public class CategoryController : Controller
     {
@@ -40,7 +40,8 @@ namespace EcommerceProject.Controllers
             //    ModelState.AddModelError("", "Test is an invalid value");
             //}
 
-            if (ModelState.IsValid) {
+            if (ModelState.IsValid)
+            {
                 _unitOfWork.Category.Add(obj);
                 _unitOfWork.Save();
                 TempData["success"] = "Category created sucessfully";
@@ -51,12 +52,12 @@ namespace EcommerceProject.Controllers
 
         public IActionResult Edit(int? id)
         {
-            if(id == null || id == 0)
+            if (id == null || id == 0)
             {
                 return NotFound();
             }
-            Category categoryFromDB = _unitOfWork.Category.Get(u=>u.Id == id);
-            if(categoryFromDB == null)
+            Category categoryFromDB = _unitOfWork.Category.Get(u => u.Id == id);
+            if (categoryFromDB == null)
             {
                 return NotFound();
             }
