@@ -14,7 +14,10 @@ namespace EcommerceProject.DataAccess.Data
 
         //categories is a name of table in the db
         public DbSet<Category> Categories { get; set; }
+
         public DbSet<Product> Products { get; set; }
+
+        public DbSet<ApplicationUser> ApplicationUser { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
