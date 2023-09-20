@@ -3,8 +3,6 @@
 #nullable disable
 
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace EcommerceProject.Areas.Identity.Pages.Account
@@ -22,21 +20,6 @@ namespace EcommerceProject.Areas.Identity.Pages.Account
         /// </summary>
         public void OnGet()
         {
-        }
-
-        public IActionResult OnPost(string returnUrl = null)
-        {
-            HttpContext.Session.Clear();
-            if (returnUrl != null)
-            {
-                return LocalRedirect(returnUrl);
-            }
-            else
-            {
-                // This needs to be a redirect so that the browser performs a new
-                // request and the identity for the user gets updated.
-                return RedirectToPage();
-            }
         }
     }
 }
